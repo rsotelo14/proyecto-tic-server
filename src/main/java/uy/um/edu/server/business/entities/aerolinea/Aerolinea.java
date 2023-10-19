@@ -48,7 +48,7 @@ public class Aerolinea {
 
     public Aerolinea() {
     }
-    @JsonBackReference
+    @JsonIgnore
     @OneToMany(mappedBy = "aerolinea")
     private List<UsuarioAerolinea> usuarios=new ArrayList<>();
 

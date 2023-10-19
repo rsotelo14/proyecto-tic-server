@@ -9,8 +9,8 @@ import uy.um.edu.server.business.entities.Usuario;
 
 
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = AdminAerolinea.class, name = "adminAerolinea"),
-        @JsonSubTypes.Type(value = EmpleadoAerolinea.class, name = "empleadoAerolinea")
+        @JsonSubTypes.Type(value = AdminAerolinea.class),
+        @JsonSubTypes.Type(value = EmpleadoAerolinea.class)
 })
 @Entity
 @DiscriminatorValue("usuarioAerolinea")
@@ -19,7 +19,6 @@ public class UsuarioAerolinea extends Usuario {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "aerolinea_id")
-    @JsonManagedReference
     private Aerolinea aerolinea;
 
     public UsuarioAerolinea(String nombre, String apellido, String email, String password, Aerolinea aerolinea) {

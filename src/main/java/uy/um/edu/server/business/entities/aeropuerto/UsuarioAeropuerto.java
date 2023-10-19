@@ -8,8 +8,8 @@ import jakarta.persistence.*;
 import uy.um.edu.server.business.entities.Usuario;
 
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = AdminAeropuerto.class, name = "adminAeropuerto"),
-        @JsonSubTypes.Type(value = MaleteroAeropuerto.class, name = "maleteroAeropuerto")
+        @JsonSubTypes.Type(value = AdminAeropuerto.class),
+        @JsonSubTypes.Type(value = MaleteroAeropuerto.class)
 })
 @Entity
 @DiscriminatorValue("usuarioAeropuerto")
@@ -19,7 +19,6 @@ public class UsuarioAeropuerto extends Usuario {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "aeropuerto_id")
-    @JsonManagedReference
     private Aeropuerto aeropuerto;
 
     public UsuarioAeropuerto(String nombre, String apellido, String email, String password, Aeropuerto aeropuerto) {

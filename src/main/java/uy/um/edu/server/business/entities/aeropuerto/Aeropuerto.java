@@ -72,7 +72,7 @@ public class Aeropuerto {
 
     public Aeropuerto() {
     }
-    @JsonBackReference
+    @JsonIgnore
     @OneToMany(mappedBy = "aeropuerto", fetch = FetchType.EAGER)
     private List<UsuarioAeropuerto> usuarios=new ArrayList<>();
 
