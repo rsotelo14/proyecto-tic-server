@@ -6,4 +6,6 @@ import uy.um.edu.server.business.entities.aerolinea.Aerolinea;
 
 public interface AerolineaRepository extends CrudRepository<Aerolinea, Long> {
     public Aerolinea findOneByNombre(String nombre);
+
+    Aerolinea findOneByCodigoIATA(String codigoIATA);
 }

@@ -3,6 +3,7 @@ package uy.um.edu.server.business.managers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import uy.um.edu.server.business.entities.aerolinea.Aerolinea;
 import uy.um.edu.server.business.entities.aeropuerto.Aeropuerto;
 import uy.um.edu.server.business.entities.vuelos.EstadoVuelo;
 import uy.um.edu.server.business.entities.vuelos.Vuelo;
@@ -21,6 +22,10 @@ public class VueloMgr {
     @Lazy
     private AeropuertoMgr aeropuertoMgr;
 
+    @Autowired
+    @Lazy
+    private AerolineaMgr aerolineaMgr;
+
     public void agregarVuelo(Vuelo vuelo) throws InvalidInformation, EntidadYaExiste {
         //verifico si la informacion del vuelo es válida
         if (vuelo.getAerolinea()==null||vuelo.getAeropuertoOrigen()==null||
@@ -32,6 +37,23 @@ public class VueloMgr {
         if (vueloRepository.findOneByCodigoVuelo(vuelo.getCodigoVuelo())!=null){
             throw new EntidadYaExiste("Ya existe un vuelo con este codigo");
         }
+        Aeropuerto aeropuertoOrigen = aeropuertoMgr.obtenerUnoPorCodigo(vuelo.getAeropuertoOrigen().getCodigo());
+        Aeropuerto aeropuertoDestino = aeropuertoMgr.obtenerUnoPorCodigo(vuelo.getAeropuertoDestino().getCodigo());
+        Aerolinea aerolinea = aerolineaMgr.obtenerUnoPorCodigoIATA(vuelo.getAerolinea().getCodigoIATA());
+        if (aeropuertoOrigen==null||aeropuertoDestino==null){
+            throw new InvalidInformation("Alguno de los aeropuertos no existe");
+        }
+        if (aerolinea==null){
+            throw new InvalidInformation("La aerolinea no existe");
+        }
+        assert aeropuertoOrigen.equals(vuelo.getAeropuertoOrigen());
+        assert aeropuertoDestino.equals(vuelo.getAeropuertoDestino());
+        assert aerolinea.equals(vuelo.getAerolinea());
+        vuelo.setAeropuertoOrigen(aeropuertoOrigen);
+        vuelo.setAeropuertoDestino(aeropuertoDestino);
+        vuelo.setAerolinea(aerolinea);
+
+
 
         vueloRepository.save(vuelo);
     }

@@ -1,13 +1,14 @@
 package uy.um.edu.server.business.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uy.um.edu.server.business.entities.Usuario;
+import uy.um.edu.server.business.entities.aeropuerto.Aeropuerto;
 import uy.um.edu.server.business.entities.vuelos.Vuelo;
+import uy.um.edu.server.business.exceptions.EntidadYaExiste;
+import uy.um.edu.server.business.exceptions.InvalidInformation;
 import uy.um.edu.server.business.managers.AeropuertoMgr;
 
 import java.util.List;
@@ -30,4 +31,16 @@ public class AeropuertoController {
         List<Vuelo> usuarios = (List<Vuelo>) aeropuertoMgr.obtenerVuelosPendientesPorAeropuerto(codigo);
         return ResponseEntity.ok(usuarios);
     }
+
+    @PostMapping
+    public ResponseEntity<String> agregarAeropuerto(@RequestBody Aeropuerto aeropuerto) {
+        try {
+            aeropuertoMgr.agregarAeropuerto(aeropuerto);
+            return new ResponseEntity<String>("Aeropuerto creado", HttpStatus.CREATED);
+        } catch (InvalidInformation e) {
+            return new ResponseEntity<String>("Información inválida", HttpStatus.BAD_REQUEST);
+        } catch (EntidadYaExiste e) {
+            return new ResponseEntity<String>("Aeropuerto ya existe", HttpStatus.CONFLICT);
+        }
+        }
 }

@@ -28,6 +28,14 @@ public class Aerolinea {
     @Column(unique = true)
     private String nombre;
 
+    @Column(unique = true)
+    private String codigoIATA;
+
+    @Column(unique = true)
+    private String codigoICAO;
+
+    @Column
+    private String paisDeOrigen;
     public String getNombre() {
         return nombre;
     }
@@ -37,7 +45,7 @@ public class Aerolinea {
     }
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "aerolineas")
+    @ManyToMany(mappedBy = "aerolineas", fetch = FetchType.EAGER)
     private List<Aeropuerto> aeropuertos=new ArrayList<>();
     @OneToMany(mappedBy = "aerolinea")
     @JsonIgnore
@@ -52,7 +60,44 @@ public class Aerolinea {
     @OneToMany(mappedBy = "aerolinea")
     private List<UsuarioAerolinea> usuarios=new ArrayList<>();
 
-//    public String getNombre() {
+    public String getCodigoICAO() {
+        return codigoICAO;
+    }
+
+    public void setCodigoICAO(String codigoICAO) {
+        this.codigoICAO = codigoICAO;
+    }
+
+    public String getCodigoIATA() {
+        return codigoIATA;
+    }
+
+    public void setCodigoIATA(String codigoIATA) {
+        this.codigoIATA = codigoIATA;
+    }
+
+    public String getPaisDeOrigen() {
+        return paisDeOrigen;
+    }
+
+    public void setPaisDeOrigen(String paisDeOrigen) {
+        this.paisDeOrigen = paisDeOrigen;
+    }
+
+    public List<Aeropuerto> getAeropuertos() {
+        return aeropuertos;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Aerolinea) {
+            Aerolinea aerolinea = (Aerolinea) obj;
+            return aerolinea.getCodigoIATA().equals(this.getCodigoIATA());
+        }
+        return false;
+    }
+
+    //    public String getNombre() {
 //        return nombre;
 //    }
 //

@@ -3,8 +3,11 @@ package uy.um.edu.server.business.managers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.server.business.entities.aerolinea.Aerolinea;
+import uy.um.edu.server.business.entities.aeropuerto.Aeropuerto;
 import uy.um.edu.server.business.exceptions.EntidadYaExiste;
 import uy.um.edu.server.persistence.aerolinea.AerolineaRepository;
+
+import java.util.List;
 
 @Service
 public class AerolineaMgr {
@@ -32,4 +35,12 @@ public class AerolineaMgr {
         return aerolineaRepository.findById(id).get();
     }
 
+    public List<Aeropuerto> obtenerAeropuertosPorAerolinea(String codigoIATA) {
+        return aerolineaRepository.findOneByCodigoIATA(codigoIATA).getAeropuertos();
+    }
+
+
+    public Aerolinea obtenerUnoPorCodigoIATA(String codigoIATA) {
+        return aerolineaRepository.findOneByCodigoIATA(codigoIATA);
+    }
 }
