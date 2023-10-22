@@ -7,4 +7,5 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
 
     Usuario findOneByPasaporte(String pasaporte);
     Usuario findOneByCorreo(String correo);
+
 }

@@ -24,6 +24,14 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
+
+    @GetMapping("/{correo}")
+    public ResponseEntity<Usuario> obtenerUnoPorCorreo(@PathVariable String correo) {
+        Usuario usuario = usuarioMgr.obtenerUnoPorCorreo(correo);
+        return ResponseEntity.ok(usuario);
+
+    }
+
     @PostMapping
     public ResponseEntity<?> agregarUsuario( @RequestBody Usuario usuario) {
         try {

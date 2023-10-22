@@ -1,12 +1,14 @@
 package uy.um.edu.server.business.managers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import uy.um.edu.server.business.entities.aeropuerto.Aeropuerto;
 import uy.um.edu.server.business.entities.vuelos.EstadoVuelo;
 import uy.um.edu.server.business.entities.vuelos.Vuelo;
 import uy.um.edu.server.business.exceptions.EntidadYaExiste;
 import uy.um.edu.server.business.exceptions.InvalidInformation;
+import uy.um.edu.server.persistence.aeropuerto.AeropuertoRepository;
 import uy.um.edu.server.persistence.vuelos.VueloRepository;
 
 import java.util.List;
@@ -15,6 +17,10 @@ import java.util.List;
 public class VueloMgr {
     @Autowired
     private VueloRepository vueloRepository;
+    @Autowired
+    @Lazy
+    private AeropuertoMgr aeropuertoMgr;
+
     public void agregarVuelo(Vuelo vuelo) throws InvalidInformation, EntidadYaExiste {
         //verifico si la informacion del vuelo es válida
         if (vuelo.getAerolinea()==null||vuelo.getAeropuertoOrigen()==null||
@@ -73,6 +79,18 @@ public class VueloMgr {
             vueloRepository.save(vuelo);
         }
 
+    }
+
+    public void validarVueloPorCodigos(String codigoVuelo, String codigoAeropuerto) throws InvalidInformation {
+        Vuelo vuelo = vueloRepository.findOneByCodigoVuelo(codigoVuelo);
+        Aeropuerto aeropuerto = aeropuertoMgr.obtenerUnoPorCodigo(codigoAeropuerto);
+        validarVuelo(vuelo, aeropuerto);
+    }
+
+    public void rechazarVueloPorCodigos(String codigoVuelo, String codigoAeropuerto) throws InvalidInformation {
+        Vuelo vuelo = vueloRepository.findOneByCodigoVuelo(codigoVuelo);
+        Aeropuerto aeropuerto = aeropuertoMgr.obtenerUnoPorCodigo(codigoAeropuerto);
+        rechazarVuelo(vuelo, aeropuerto);
     }
 }
 

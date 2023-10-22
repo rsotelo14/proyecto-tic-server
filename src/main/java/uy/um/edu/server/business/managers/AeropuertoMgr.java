@@ -20,6 +20,12 @@ public class AeropuertoMgr {
     @Autowired
     private VueloMgr vueloMgr;
 
+    public AeropuertoMgr() {
+    }
+    public AeropuertoMgr(AeropuertoRepository aeropuertoRepository) {
+        this.aeropuertoRepository = aeropuertoRepository;
+    }
+
     public void agregarAeropuerto(Aeropuerto aeropuerto) throws InvalidInformation, EntidadYaExiste {
         //Verifica si la informacions es correcto
         if (aeropuerto.getNombre()==null || aeropuerto.getNombre().equals("")||aeropuerto.getCiudad()==null
@@ -62,5 +68,26 @@ public class AeropuertoMgr {
             }
         }
         return vuelosPendientes;
+    }
+
+    public Object obtenerUsuariosPorAeropuerto(String codigo) {
+        Aeropuerto aeropuerto = aeropuertoRepository.findOneByCodigo(codigo);
+        if (aeropuerto == null) {
+            return null;
+        }
+        return aeropuerto.getUsuarios();
+    }
+
+    public List<Vuelo> obtenerVuelosPendientesPorAeropuerto(String codigo) {
+        Aeropuerto aeropuerto = aeropuertoRepository.findOneByCodigo(codigo);
+        if (aeropuerto == null) {
+            return null;
+        }
+        return obtenerVuelosPendientes(aeropuerto);
+    }
+
+    public void setAeropuertoRepository(AeropuertoRepository aeropuertoRepository) {
+
+        this.aeropuertoRepository = aeropuertoRepository;
     }
 }
