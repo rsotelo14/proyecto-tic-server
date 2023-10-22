@@ -2,6 +2,7 @@ package uy.um.edu.server.business.managers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uy.um.edu.server.business.entities.aerolinea.Aerolinea;
 import uy.um.edu.server.business.entities.aeropuerto.Aeropuerto;
 import uy.um.edu.server.business.entities.vuelos.EstadoVuelo;
 import uy.um.edu.server.business.entities.vuelos.Vuelo;
@@ -19,6 +20,8 @@ public class AeropuertoMgr {
     private AeropuertoRepository aeropuertoRepository;
     @Autowired
     private VueloMgr vueloMgr;
+    @Autowired
+    private AerolineaMgr aerolineaMgr;
 
     public AeropuertoMgr() {
     }
@@ -89,5 +92,22 @@ public class AeropuertoMgr {
     public void setAeropuertoRepository(AeropuertoRepository aeropuertoRepository) {
 
         this.aeropuertoRepository = aeropuertoRepository;
+    }
+
+    public void asociarAerolinea(String codigo, String codigoAerolinea) throws InvalidInformation {
+        Aeropuerto aeropuerto = aeropuertoRepository.findOneByCodigo(codigo);
+        Aerolinea aerolinea = aerolineaMgr.obtenerUnoPorCodigoIATA(codigoAerolinea);
+        if (aeropuerto == null || aerolinea == null) {
+            throw new InvalidInformation("El aeropuerto o la aerolinea no existen");
+        }
+        aeropuerto.getAerolineas().add(aerolinea);
+        aeropuertoRepository.save(aeropuerto);
+    }
+
+    public List<Aerolinea> obtenerAerolineasDisponibles(String codigo) throws InvalidInformation {
+        Aeropuerto aeropuerto = aeropuertoRepository.findOneByCodigo(codigo);
+        if (aeropuerto == null) throw new InvalidInformation("");
+        return aeropuertoRepository.findAvailableAirlinesForAirport(aeropuerto);
+
     }
 }
