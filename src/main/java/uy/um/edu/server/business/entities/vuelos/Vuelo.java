@@ -1,9 +1,13 @@
 package uy.um.edu.server.business.entities.vuelos;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.cglib.core.Local;
 import uy.um.edu.server.business.entities.aerolinea.Aerolinea;
 import uy.um.edu.server.business.entities.aeropuerto.Aeropuerto;
 import uy.um.edu.server.business.entities.aeropuerto.PuertaAeropuerto;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -33,12 +37,12 @@ public class Vuelo {
     @JoinColumn(name = "puerta_destino_id")
     private PuertaAeropuerto puertaDestino;
 
-    private String fechaSalida;
-    private String fechaLlegada;
-    private String horaSalidaEstimada;
-    private String horaSalidaReal;
-    private String horaLlegadaEstimada;
-    private String horaLlegadaReal;
+    private LocalDate fechaSalida;
+    private LocalDate fechaLlegada;
+    private LocalTime horaSalidaEstimada;
+    private LocalTime horaSalidaReal;
+    private LocalTime horaLlegadaEstimada;
+    private LocalTime horaLlegadaReal;
     private Long capacidadMaxima;
     private Long pasajerosConfirmados;
 
@@ -48,15 +52,24 @@ public class Vuelo {
     @JoinColumn(name = "avion_id")
     private Avion avion;
 
+
+    @OneToOne
+    @JoinColumn(name = "reserva_puerta_id")
+    private ReservaPuerta reservaPuerta;
+
+    @OneToOne
+    @JoinColumn(name = "reserva_pista_id")
+    private ReservaPista reservaPista;
+
     public Vuelo() {
     }
 
 
-    public Vuelo(String codigoVuelo ,Aerolinea aerolinea, Aeropuerto aeropuerto_origen,
+    public Vuelo(String codigoVuelo , Aerolinea aerolinea, Aeropuerto aeropuerto_origen,
 
                  Aeropuerto aeropuerto_destino,
-                 String fecha_salida, String fecha_llegada, String hora_salida_estimada, String hora_salida_real,
-                 String hora_llegada_estimada, String hora_llegada_real, Long capacidad_maxima,
+                 LocalDate fecha_salida, LocalDate fecha_llegada, LocalTime hora_salida_estimada, LocalTime hora_salida_real,
+                 LocalTime hora_llegada_estimada, LocalTime hora_llegada_real, Long capacidad_maxima,
                  Long pasajeros_confirmados, Avion avion, EstadoVuelo estado) {
         this.codigoVuelo=codigoVuelo;
         this.aerolinea = aerolinea;
@@ -131,51 +144,51 @@ public class Vuelo {
         this.puertaDestino = puertaDestino;
     }
 
-    public String getFechaSalida() {
+    public LocalDate getFechaSalida() {
         return fechaSalida;
     }
 
-    public void setFechaSalida(String fechaSalida) {
+    public void setFechaSalida(LocalDate fechaSalida) {
         this.fechaSalida = fechaSalida;
     }
 
-    public String getFechaLlegada() {
+    public LocalDate getFechaLlegada() {
         return fechaLlegada;
     }
 
-    public void setFechaLlegada(String fechaLlegada) {
+    public void setFechaLlegada(LocalDate fechaLlegada) {
         this.fechaLlegada = fechaLlegada;
     }
 
-    public String getHoraSalidaEstimada() {
+    public LocalTime getHoraSalidaEstimada() {
         return horaSalidaEstimada;
     }
 
-    public void setHoraSalidaEstimada(String horaSalidaEstimada) {
+    public void setHoraSalidaEstimada(LocalTime horaSalidaEstimada) {
         this.horaSalidaEstimada = horaSalidaEstimada;
     }
 
-    public String getHoraSalidaReal() {
+    public LocalTime getHoraSalidaReal() {
         return horaSalidaReal;
     }
 
-    public void setHoraSalidaReal(String horaSalidaReal) {
+    public void setHoraSalidaReal(LocalTime horaSalidaReal) {
         this.horaSalidaReal = horaSalidaReal;
     }
 
-    public String getHoraLlegadaEstimada() {
+    public LocalTime getHoraLlegadaEstimada() {
         return horaLlegadaEstimada;
     }
 
-    public void setHoraLlegadaEstimada(String horaLlegadaEstimada) {
+    public void setHoraLlegadaEstimada(LocalTime horaLlegadaEstimada) {
         this.horaLlegadaEstimada = horaLlegadaEstimada;
     }
 
-    public String getHoraLlegadaReal() {
+    public LocalTime getHoraLlegadaReal() {
         return horaLlegadaReal;
     }
 
-    public void setHoraLlegadaReal(String horaLlegadaReal) {
+    public void setHoraLlegadaReal(LocalTime horaLlegadaReal) {
         this.horaLlegadaReal = horaLlegadaReal;
     }
 
