@@ -110,4 +110,11 @@ public class AeropuertoMgr {
         return aeropuertoRepository.findAvailableAirlinesForAirport(aeropuerto);
 
     }
+
+    public List<Aerolinea> obtenerAerolineasAsociadas(String codigo) throws InvalidInformation {
+        Aeropuerto aeropuerto = aeropuertoRepository.findOneByCodigo(codigo);
+        if (aeropuerto == null) throw new InvalidInformation("");
+        return aeropuertoRepository.findAssociatedAirlinesForAirport(aeropuerto);
+
+    }
 }

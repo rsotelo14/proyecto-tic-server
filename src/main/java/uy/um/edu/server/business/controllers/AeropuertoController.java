@@ -65,4 +65,14 @@ public class AeropuertoController {
         }
         return ResponseEntity.ok(aerolineas);
     }
+    @GetMapping("/{codigo}/aerolineas-asociadas")
+    public ResponseEntity<List<Aerolinea>> obtenerAerolineasAsociadas(@PathVariable String codigo) {
+        List<Aerolinea> aerolineas = null;
+        try {
+            aerolineas = aeropuertoMgr.obtenerAerolineasAsociadas(codigo);
+        } catch (InvalidInformation e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(aerolineas);
+    }
 }

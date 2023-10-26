@@ -9,11 +9,14 @@ import uy.um.edu.server.business.entities.aeropuerto.Aeropuerto;
 
 import java.util.List;
 
-public interface AeropuertoRepository  extends CrudRepository<Aeropuerto, Long> {
+public interface AeropuertoRepository extends CrudRepository<Aeropuerto, Long> {
     Aeropuerto findOneByNombre(String nombre);
+
     Aeropuerto findOneByCodigo(String codigo);
+
     @Query("SELECT a FROM Aerolinea a WHERE :aeropuerto NOT MEMBER OF a.aeropuertos")
     List<Aerolinea> findAvailableAirlinesForAirport(Aeropuerto aeropuerto);
 
-
+    @Query("SELECT a FROM Aerolinea a WHERE :aeropuerto MEMBER OF a.aeropuertos")
+    List<Aerolinea> findAssociatedAirlinesForAirport(Aeropuerto aeropuerto);
 }
