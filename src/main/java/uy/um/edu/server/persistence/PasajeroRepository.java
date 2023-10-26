@@ -4,4 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 import uy.um.edu.server.business.entities.pasajeros.Pasajero;
 
 public interface PasajeroRepository extends CrudRepository<Pasajero, Long> {
+    Pasajero findOneByPasaporte(String pasaporte);
+    Pasajero findOneByCorreo(String correo);
 }
