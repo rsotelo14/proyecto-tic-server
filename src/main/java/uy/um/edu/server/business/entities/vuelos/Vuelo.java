@@ -8,6 +8,7 @@ import uy.um.edu.server.business.entities.aeropuerto.PuertaAeropuerto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -29,13 +30,7 @@ public class Vuelo {
     @ManyToOne
     @JoinColumn(name = "aeropuerto_destino_id")
     private Aeropuerto aeropuertoDestino;
-    @ManyToOne
-    @JoinColumn(name = "puerta_origen_id")
-    private PuertaAeropuerto puertaOrigen;
 
-    @ManyToOne
-    @JoinColumn(name = "puerta_destino_id")
-    private PuertaAeropuerto puertaDestino;
 
     private LocalDate fechaSalida;
     private LocalDate fechaLlegada;
@@ -54,12 +49,20 @@ public class Vuelo {
 
 
     @OneToOne
-    @JoinColumn(name = "reserva_puerta_id")
-    private ReservaPuerta reservaPuerta;
+    @JoinColumn(name = "reserva_puerta_origen_id")
+    private ReservaPuerta reservaPuertaOrigen;
 
     @OneToOne
-    @JoinColumn(name = "reserva_pista_id")
-    private ReservaPista reservaPista;
+    @JoinColumn(name = "reserva_puerta_destino_id")
+    private ReservaPuerta reservaPuertaDestino;
+
+
+    @OneToOne
+    @JoinColumn(name = "reserva_pista_origen_id")
+    private ReservaPista reservaPistaOrigen;
+    @OneToOne
+    @JoinColumn(name = "reserva_pista_destino_id")
+    private ReservaPista reservaPistaDestino;
 
     public Vuelo() {
     }
@@ -86,6 +89,19 @@ public class Vuelo {
         this.pasajerosConfirmados = pasajeros_confirmados;
         this.avion = avion;
         this.estado= estado;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vuelo vuelo = (Vuelo) o;
+        return Objects.equals(codigoVuelo, vuelo.codigoVuelo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(codigoVuelo);
     }
 
     public String getCodigoVuelo() {
@@ -126,22 +142,6 @@ public class Vuelo {
 
     public void setAeropuertoDestino(Aeropuerto aeropuertoDestino) {
         this.aeropuertoDestino = aeropuertoDestino;
-    }
-
-    public PuertaAeropuerto getPuertaOrigen() {
-        return puertaOrigen;
-    }
-
-    public void setPuertaOrigen(PuertaAeropuerto puertaOrigen) {
-        this.puertaOrigen = puertaOrigen;
-    }
-
-    public PuertaAeropuerto getPuertaDestino() {
-        return puertaDestino;
-    }
-
-    public void setPuertaDestino(PuertaAeropuerto puertaDestino) {
-        this.puertaDestino = puertaDestino;
     }
 
     public LocalDate getFechaSalida() {

@@ -3,17 +3,19 @@ package uy.um.edu.server.business.entities.aeropuerto;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
+
 @Entity
-@Table(name = "pistas_aeropuerto")
 public class PistaAeropuerto {
 
     @Id
-    @GeneratedValue(generator = "pista_aeropuerto_ids")
-    @GenericGenerator(name = "pista_aeropuerto_ids", strategy = "increment")
+    @GeneratedValue(generator="pistas_ids")
+    @GenericGenerator(name="pistas_ids", strategy = "increment")
     private Long id;
     private Long tarifaHora;
-    @Column(unique = true, nullable = false)
+
+    @Column(unique = true , nullable = false)
     private Long numeroPista;
+
     @ManyToOne
     @JoinColumn(name = "aeropuerto_id")
     private Aeropuerto aeropuerto;
@@ -49,5 +51,13 @@ public class PistaAeropuerto {
 
     public void setAeropuerto(Aeropuerto aeropuerto) {
         this.aeropuerto = aeropuerto;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

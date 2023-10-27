@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import uy.um.edu.server.business.entities.Usuario;
 import uy.um.edu.server.business.entities.aerolinea.Aerolinea;
 import uy.um.edu.server.business.entities.aeropuerto.Aeropuerto;
+import uy.um.edu.server.business.entities.aeropuerto.PistaAeropuerto;
+import uy.um.edu.server.business.entities.aeropuerto.PuertaAeropuerto;
 import uy.um.edu.server.business.entities.vuelos.Vuelo;
 import uy.um.edu.server.business.exceptions.EntidadYaExiste;
 import uy.um.edu.server.business.exceptions.InvalidInformation;
@@ -64,5 +66,17 @@ public class AeropuertoController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(aerolineas);
+    }
+
+    @GetMapping("{codigo}/puertas")
+    public ResponseEntity<List<PuertaAeropuerto>> obtenerPuertas(@PathVariable String codigo) {
+        List<PuertaAeropuerto> puertas = aeropuertoMgr.obtenerPuertas(codigo);
+        return ResponseEntity.ok(puertas);
+    }
+
+    @GetMapping("{codigo}/pistas")
+    public ResponseEntity<List<PistaAeropuerto>> obtenerPistas(@PathVariable String codigo) {
+        List<PistaAeropuerto> pistas = aeropuertoMgr.obtenerPistas(codigo);
+        return ResponseEntity.ok(pistas);
     }
 }

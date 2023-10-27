@@ -2,6 +2,7 @@ package uy.um.edu.server.business.entities.aeropuerto;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 import uy.um.edu.server.business.entities.vuelos.Vuelo;
@@ -26,9 +27,32 @@ public class PuertaAeropuerto {
     public PuertaAeropuerto() {
     }
 
-    @OneToMany(mappedBy = "puertaOrigen")
-    private List<Vuelo> vuelosSalientes =new ArrayList<>();
-    @OneToMany(mappedBy = "puertaDestino")
-    private List<Vuelo> vuelosEntrantes =new ArrayList<>();
 
+    public Long getTarifaHora() {
+        return tarifaHora;
+    }
+
+    public void setTarifaHora(Long tarifaHora) {
+        this.tarifaHora = tarifaHora;
+    }
+
+    public Long getNumeroPuerta() {
+        return numeroPuerta;
+    }
+
+    public void setNumeroPuerta(Long numeroPuerta) {
+        this.numeroPuerta = numeroPuerta;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Aeropuerto getAeropuerto() {
+        return aeropuerto;
+    }
 }
