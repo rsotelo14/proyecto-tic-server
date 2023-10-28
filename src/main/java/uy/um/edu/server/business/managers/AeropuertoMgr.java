@@ -117,7 +117,7 @@ public class AeropuertoMgr {
         Aeropuerto aeropuerto = aeropuertoRepository.findOneByCodigo(codigo);
         if (aeropuerto == null) throw new InvalidInformation("");
         return aeropuertoRepository.findAssociatedAirlinesForAirport(aeropuerto);
-
+    }
 
     public List<PuertaAeropuerto> obtenerPuertas(String codigo) {
         Aeropuerto aeropuerto = aeropuertoRepository.findOneByCodigo(codigo);

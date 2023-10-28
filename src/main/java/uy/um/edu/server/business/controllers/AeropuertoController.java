@@ -77,7 +77,7 @@ public class AeropuertoController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(aerolineas);
-
+    }
 
     @GetMapping("{codigo}/puertas")
     public ResponseEntity<List<PuertaAeropuerto>> obtenerPuertas(@PathVariable String codigo) {
