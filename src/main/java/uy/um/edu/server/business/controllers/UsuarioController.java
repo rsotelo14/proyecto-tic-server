@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.*;
 import uy.um.edu.server.business.entities.Usuario;
 import uy.um.edu.server.business.entities.aerolinea.UsuarioAerolinea;
 import uy.um.edu.server.business.entities.aeropuerto.AdminAeropuerto;
+import uy.um.edu.server.business.entities.pasajeros.Pasajero;
+import uy.um.edu.server.business.exceptions.EntidadYaExiste;
 import uy.um.edu.server.business.exceptions.InvalidInformation;
 import uy.um.edu.server.business.exceptions.UsuarioYaExiste;
+import uy.um.edu.server.business.managers.PasajeroMgr;
 import uy.um.edu.server.business.managers.UsuarioAerolineaMgr;
 import uy.um.edu.server.business.managers.UsuarioAeropuertoMgr;
 import uy.um.edu.server.business.managers.UsuarioMgr;
@@ -21,6 +24,8 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioMgr usuarioMgr;
+    @Autowired
+    private PasajeroMgr pasajeroMgr;
     @Autowired
     private UsuarioAeropuertoMgr usuarioAeropuertoMgr;
     @Autowired
@@ -39,10 +44,23 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
 
     }
+    @PostMapping("/pasajero")
+    public ResponseEntity<String> agregarPasajero( @RequestBody Pasajero pasajero){
+       try{
+           pasajeroMgr.agregarPasajero(pasajero);
+           return new ResponseEntity<>("Pasajero creado",HttpStatus.CREATED);
+         } catch (InvalidInformation e) {
+              return new ResponseEntity<>("Información inválida",HttpStatus.BAD_REQUEST);
+         } catch (EntidadYaExiste e) {
+              return new ResponseEntity<>("Usuario ya existe", HttpStatus.CONFLICT);
+         } catch (Exception e) {
+              System.out.println(e.getMessage());
+              return new ResponseEntity<>("Error interno", HttpStatus.INTERNAL_SERVER_ERROR);
+       }
+    }
 
     @PostMapping
     public ResponseEntity<String> agregarUsuario( @RequestBody Usuario usuario) {
-        System.out.println(usuario.getNombre());
 
         try {
             if (usuario instanceof AdminAeropuerto){

@@ -79,6 +79,5 @@ public class Usuario {
         this.contrasena = contrasena;
     }
 
-    // Getters y setters
 
 }
