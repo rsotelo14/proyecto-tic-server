@@ -43,4 +43,10 @@ public class AerolineaMgr {
     public Aerolinea obtenerUnoPorCodigoIATA(String codigoIATA) {
         return aerolineaRepository.findOneByCodigoIATA(codigoIATA);
     }
+
+    public List<Aeropuerto> obtenerAeropuertosAsociados(String codigoIATA){
+        Aerolinea aerolinea = aerolineaRepository.findOneByCodigoIATA(codigoIATA);
+        if (aerolinea == null) throw new RuntimeException("Aerolinea no existe");
+        return aerolineaRepository.findAssociatedAeropuertosForAirline(aerolinea);
+    }
 }

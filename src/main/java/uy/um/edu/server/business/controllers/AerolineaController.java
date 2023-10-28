@@ -24,6 +24,12 @@ public class AerolineaController {
         return ResponseEntity.ok(aeropuertos);
     }
 
+    @GetMapping("/{codigoIATA}/aeropuertos-asociados")
+    public ResponseEntity<List<Aeropuerto>> obtenerAeropuertosAsociados(@PathVariable String codigoIATA) {
+        List<Aeropuerto> aeropuertos = (List<Aeropuerto>) aerolineaMgr.obtenerAeropuertosAsociados(codigoIATA);
+        return ResponseEntity.ok(aeropuertos);
+    }
+
     @PostMapping
     public ResponseEntity<Aerolinea> agregarAerolinea(@RequestBody Aerolinea aerolinea) {
         try {
