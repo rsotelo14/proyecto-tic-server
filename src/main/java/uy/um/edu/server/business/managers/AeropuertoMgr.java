@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.server.business.entities.aerolinea.Aerolinea;
 import uy.um.edu.server.business.entities.aeropuerto.Aeropuerto;
+import uy.um.edu.server.business.entities.aeropuerto.PistaAeropuerto;
+import uy.um.edu.server.business.entities.aeropuerto.PuertaAeropuerto;
 import uy.um.edu.server.business.entities.vuelos.EstadoVuelo;
 import uy.um.edu.server.business.entities.vuelos.Vuelo;
 import uy.um.edu.server.business.exceptions.EntidadYaExiste;
@@ -109,5 +111,24 @@ public class AeropuertoMgr {
         if (aeropuerto == null) throw new InvalidInformation("");
         return aeropuertoRepository.findAvailableAirlinesForAirport(aeropuerto);
 
+    }
+
+    public List<PuertaAeropuerto> obtenerPuertas(String codigo) {
+        Aeropuerto aeropuerto = aeropuertoRepository.findOneByCodigo(codigo);
+        if (aeropuerto == null) return null;
+        return aeropuerto.getPuertas();
+    }
+
+    public List<PistaAeropuerto> obtenerPistas(String codigo) {
+        Aeropuerto aeropuerto = aeropuertoRepository.findOneByCodigo(codigo);
+        if (aeropuerto == null) return null;
+        for (PistaAeropuerto p : aeropuerto.getPistas()){
+            System.out.println(p.getNumeroPista());
+        }
+        return aeropuerto.getPistas();
+    }
+
+    public Aeropuerto obtenerAeropuertoPorCodigo(String codigo) {
+        return aeropuertoRepository.findOneByCodigo(codigo);
     }
 }

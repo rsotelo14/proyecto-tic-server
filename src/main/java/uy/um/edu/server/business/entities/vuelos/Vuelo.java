@@ -1,9 +1,14 @@
 package uy.um.edu.server.business.entities.vuelos;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.cglib.core.Local;
 import uy.um.edu.server.business.entities.aerolinea.Aerolinea;
 import uy.um.edu.server.business.entities.aeropuerto.Aeropuerto;
 import uy.um.edu.server.business.entities.aeropuerto.PuertaAeropuerto;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -25,20 +30,14 @@ public class Vuelo {
     @ManyToOne
     @JoinColumn(name = "aeropuerto_destino_id")
     private Aeropuerto aeropuertoDestino;
-    @ManyToOne
-    @JoinColumn(name = "puerta_origen_id")
-    private PuertaAeropuerto puertaOrigen;
 
-    @ManyToOne
-    @JoinColumn(name = "puerta_destino_id")
-    private PuertaAeropuerto puertaDestino;
 
-    private String fechaSalida;
-    private String fechaLlegada;
-    private String horaSalidaEstimada;
-    private String horaSalidaReal;
-    private String horaLlegadaEstimada;
-    private String horaLlegadaReal;
+    private LocalDate fechaSalida;
+    private LocalDate fechaLlegada;
+    private LocalTime horaSalidaEstimada;
+    private LocalTime horaSalidaReal;
+    private LocalTime horaLlegadaEstimada;
+    private LocalTime horaLlegadaReal;
     private Long capacidadMaxima;
     private Long pasajerosConfirmados;
 
@@ -48,15 +47,32 @@ public class Vuelo {
     @JoinColumn(name = "avion_id")
     private Avion avion;
 
+
+    @OneToOne
+    @JoinColumn(name = "reserva_puerta_origen_id")
+    private ReservaPuerta reservaPuertaOrigen;
+
+    @OneToOne
+    @JoinColumn(name = "reserva_puerta_destino_id")
+    private ReservaPuerta reservaPuertaDestino;
+
+
+    @OneToOne
+    @JoinColumn(name = "reserva_pista_origen_id")
+    private ReservaPista reservaPistaOrigen;
+    @OneToOne
+    @JoinColumn(name = "reserva_pista_destino_id")
+    private ReservaPista reservaPistaDestino;
+
     public Vuelo() {
     }
 
 
-    public Vuelo(String codigoVuelo ,Aerolinea aerolinea, Aeropuerto aeropuerto_origen,
+    public Vuelo(String codigoVuelo , Aerolinea aerolinea, Aeropuerto aeropuerto_origen,
 
                  Aeropuerto aeropuerto_destino,
-                 String fecha_salida, String fecha_llegada, String hora_salida_estimada, String hora_salida_real,
-                 String hora_llegada_estimada, String hora_llegada_real, Long capacidad_maxima,
+                 LocalDate fecha_salida, LocalDate fecha_llegada, LocalTime hora_salida_estimada, LocalTime hora_salida_real,
+                 LocalTime hora_llegada_estimada, LocalTime hora_llegada_real, Long capacidad_maxima,
                  Long pasajeros_confirmados, Avion avion, EstadoVuelo estado) {
         this.codigoVuelo=codigoVuelo;
         this.aerolinea = aerolinea;
@@ -73,6 +89,19 @@ public class Vuelo {
         this.pasajerosConfirmados = pasajeros_confirmados;
         this.avion = avion;
         this.estado= estado;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vuelo vuelo = (Vuelo) o;
+        return Objects.equals(codigoVuelo, vuelo.codigoVuelo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(codigoVuelo);
     }
 
     public String getCodigoVuelo() {
@@ -115,67 +144,51 @@ public class Vuelo {
         this.aeropuertoDestino = aeropuertoDestino;
     }
 
-    public PuertaAeropuerto getPuertaOrigen() {
-        return puertaOrigen;
-    }
-
-    public void setPuertaOrigen(PuertaAeropuerto puertaOrigen) {
-        this.puertaOrigen = puertaOrigen;
-    }
-
-    public PuertaAeropuerto getPuertaDestino() {
-        return puertaDestino;
-    }
-
-    public void setPuertaDestino(PuertaAeropuerto puertaDestino) {
-        this.puertaDestino = puertaDestino;
-    }
-
-    public String getFechaSalida() {
+    public LocalDate getFechaSalida() {
         return fechaSalida;
     }
 
-    public void setFechaSalida(String fechaSalida) {
+    public void setFechaSalida(LocalDate fechaSalida) {
         this.fechaSalida = fechaSalida;
     }
 
-    public String getFechaLlegada() {
+    public LocalDate getFechaLlegada() {
         return fechaLlegada;
     }
 
-    public void setFechaLlegada(String fechaLlegada) {
+    public void setFechaLlegada(LocalDate fechaLlegada) {
         this.fechaLlegada = fechaLlegada;
     }
 
-    public String getHoraSalidaEstimada() {
+    public LocalTime getHoraSalidaEstimada() {
         return horaSalidaEstimada;
     }
 
-    public void setHoraSalidaEstimada(String horaSalidaEstimada) {
+    public void setHoraSalidaEstimada(LocalTime horaSalidaEstimada) {
         this.horaSalidaEstimada = horaSalidaEstimada;
     }
 
-    public String getHoraSalidaReal() {
+    public LocalTime getHoraSalidaReal() {
         return horaSalidaReal;
     }
 
-    public void setHoraSalidaReal(String horaSalidaReal) {
+    public void setHoraSalidaReal(LocalTime horaSalidaReal) {
         this.horaSalidaReal = horaSalidaReal;
     }
 
-    public String getHoraLlegadaEstimada() {
+    public LocalTime getHoraLlegadaEstimada() {
         return horaLlegadaEstimada;
     }
 
-    public void setHoraLlegadaEstimada(String horaLlegadaEstimada) {
+    public void setHoraLlegadaEstimada(LocalTime horaLlegadaEstimada) {
         this.horaLlegadaEstimada = horaLlegadaEstimada;
     }
 
-    public String getHoraLlegadaReal() {
+    public LocalTime getHoraLlegadaReal() {
         return horaLlegadaReal;
     }
 
-    public void setHoraLlegadaReal(String horaLlegadaReal) {
+    public void setHoraLlegadaReal(LocalTime horaLlegadaReal) {
         this.horaLlegadaReal = horaLlegadaReal;
     }
 

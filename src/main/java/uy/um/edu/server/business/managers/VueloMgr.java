@@ -70,6 +70,10 @@ public class VueloMgr {
     }
 
     public void validarVuelo(Vuelo vuelo, Aeropuerto aeropuerto) throws InvalidInformation {
+        Aerolinea aerolineaRep = aerolineaMgr.obtenerUnoPorCodigoIATA(vuelo.getAerolinea().getCodigoIATA());
+        assert aerolineaRep.equals(vuelo.getAerolinea());
+        vuelo.setAerolinea(aerolineaRep);
+
         if (vuelo.getAeropuertoOrigen().equals(aeropuerto)){
             if(vuelo.getEstado().equals(EstadoVuelo.PENDIENTE)){
                 vuelo.setEstado(EstadoVuelo.VALIDADO_ORIGEN);
@@ -113,6 +117,10 @@ public class VueloMgr {
         Vuelo vuelo = vueloRepository.findOneByCodigoVuelo(codigoVuelo);
         Aeropuerto aeropuerto = aeropuertoMgr.obtenerUnoPorCodigo(codigoAeropuerto);
         rechazarVuelo(vuelo, aeropuerto);
+    }
+
+    public Vuelo obtenerPorCodigoVuelo(String codigoVuelo) {
+        return vueloRepository.findOneByCodigoVuelo(codigoVuelo);
     }
 }
 
