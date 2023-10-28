@@ -25,7 +25,7 @@ public class UsuarioMgr {
             throw new InvalidInformation("Alguno de los datos ingresados no es correcto");
         }
 
-        // Verifico si el cliente no existe
+        // Verifico si el cliente ya existe
         if (usuarioRepository.findOneByPasaporte(usuario.getPasaporte()) != null) {
             throw new UsuarioYaExiste("Ya existe usuario con ese pasaporte");
         }

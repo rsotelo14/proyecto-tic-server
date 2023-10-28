@@ -34,6 +34,14 @@ public class Avion {
         this.vuelos = vuelos;
     }
 
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
     public Long getId() {
         return id;
     }
