@@ -42,7 +42,7 @@ public class Aeropuerto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Aeropuerto that = (Aeropuerto) o;
-        return Objects.equals(aeropuertoid, that.aeropuertoid) && Objects.equals(nombre, that.nombre) && Objects.equals(codigo, that.codigo);
+        return Objects.equals(codigo, that.codigo);
     }
 
     @Override
@@ -58,9 +58,13 @@ public class Aeropuerto {
     )
     @JsonIgnore
     private List<Aerolinea> aerolineas=new ArrayList<>();
-    @OneToMany(mappedBy = "aeropuerto")
+    @OneToMany(mappedBy = "aeropuerto", fetch = FetchType.EAGER)
     @JsonIgnore
     private List<PuertaAeropuerto> puertas=new ArrayList<>();
+
+    @OneToMany(mappedBy = "aeropuerto", fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<PistaAeropuerto> pistas=new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "aeropuertoOrigen")
@@ -181,5 +185,14 @@ public class Aeropuerto {
         this.direccion = direccion;
         this.telefono = telefono;
     }
+
+    public List<PistaAeropuerto> getPistas() {
+        return pistas;
+    }
+
+    public void setPistas(List<PistaAeropuerto> pistas) {
+        this.pistas = pistas;
+    }
+
 }
 
