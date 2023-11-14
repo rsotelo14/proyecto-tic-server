@@ -22,7 +22,7 @@ public class Avion {
     private String nombre;
     private Long capacidad;
     private String tipoAvion;
-    @OneToMany(mappedBy = "avion")
+    @OneToMany(mappedBy = "aviones")
     private List<Vuelo> vuelos;
 
     public Avion(Long id, Aerolinea aerolinea, String nombre, Long capacidad, String tipoAvion, List<Vuelo> vuelos) {

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uy.um.edu.server.business.entities.aerolinea.PasaporteCodigoVuelo;
 import uy.um.edu.server.business.entities.vuelos.Vuelo;
 import uy.um.edu.server.business.exceptions.EntidadYaExiste;
 import uy.um.edu.server.business.exceptions.InvalidInformation;
@@ -31,7 +32,7 @@ public class VueloController {
     public ResponseEntity<String> rechazarVuelo(@PathVariable String codigoVuelo, @PathVariable String codigoAeropuerto) {
         try {
             vueloMgr.rechazarVueloPorCodigos(codigoVuelo, codigoAeropuerto);
-            return new ResponseEntity<String>("Vuelo rechazado",HttpStatus.OK);
+            return new ResponseEntity<String>("Vuelo rechazado", HttpStatus.OK);
         } catch (InvalidInformation e) {
             return new ResponseEntity<>("Información inválida", HttpStatus.BAD_REQUEST);
         }
@@ -50,4 +51,15 @@ public class VueloController {
         }
     }
 
+    @PostMapping
+    public ResponseEntity<String> recibirPasaporteCodigoVuelo(@RequestBody PasaporteCodigoVuelo pasaporteCodigoVuelo) {
+        try {
+            vueloMgr.agregarPasajero(pasaporteCodigoVuelo.getCodigoVuelo(), pasaporteCodigoVuelo.getPasaporte());
+            return new ResponseEntity<>("Pasajero agregado", HttpStatus.CREATED);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }

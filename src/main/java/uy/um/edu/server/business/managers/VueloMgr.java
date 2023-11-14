@@ -5,12 +5,15 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import uy.um.edu.server.business.entities.aerolinea.Aerolinea;
 import uy.um.edu.server.business.entities.aeropuerto.Aeropuerto;
+import uy.um.edu.server.business.entities.pasajeros.Pasajero;
 import uy.um.edu.server.business.entities.vuelos.EstadoVuelo;
 import uy.um.edu.server.business.entities.vuelos.Vuelo;
 import uy.um.edu.server.business.exceptions.EntidadYaExiste;
 import uy.um.edu.server.business.exceptions.InvalidInformation;
+import uy.um.edu.server.persistence.PasajeroRepository;
 import uy.um.edu.server.persistence.aeropuerto.AeropuertoRepository;
 import uy.um.edu.server.persistence.vuelos.VueloRepository;
+import uy.um.edu.server.business.entities.*;
 
 import java.util.List;
 
@@ -25,6 +28,9 @@ public class VueloMgr {
     @Autowired
     @Lazy
     private AerolineaMgr aerolineaMgr;
+    @Autowired
+    @Lazy
+    private PasajeroRepository pasajeroRepository;
 
     public void agregarVuelo(Vuelo vuelo) throws InvalidInformation, EntidadYaExiste {
         //verifico si la informacion del vuelo es válida
@@ -117,6 +123,12 @@ public class VueloMgr {
         Vuelo vuelo = vueloRepository.findOneByCodigoVuelo(codigoVuelo);
         Aeropuerto aeropuerto = aeropuertoMgr.obtenerUnoPorCodigo(codigoAeropuerto);
         rechazarVuelo(vuelo, aeropuerto);
+    }
+    public void agregarPasajero(String codigoVuelo,String pasaporte){
+        Vuelo vuelo = vueloRepository.findOneByCodigoVuelo(codigoVuelo);
+        Pasajero pasajero =pasajeroRepository.findOneByPasaporte(pasaporte);
+        vuelo.getAsientos().stream().filter(asientos -> asientos.getPasajero()==null).findFirst().get().setPasajero(pasajero);
+
     }
 
     public Vuelo obtenerPorCodigoVuelo(String codigoVuelo) {
