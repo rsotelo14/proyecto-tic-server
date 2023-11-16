@@ -1,6 +1,7 @@
 
 package uy.um.edu.server.business.entities.vuelos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 import uy.um.edu.server.business.entities.aerolinea.Aerolinea;
@@ -23,6 +24,7 @@ public class Avion {
     private Long capacidad;
     private String tipoAvion;
     @OneToMany(mappedBy = "avion")
+    @JsonIgnore
     private List<Vuelo> vuelos;
 
     public Avion(Long id, Aerolinea aerolinea, String nombre, Long capacidad, String tipoAvion, List<Vuelo> vuelos) {

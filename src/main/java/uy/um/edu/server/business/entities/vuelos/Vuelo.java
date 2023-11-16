@@ -8,6 +8,7 @@ import uy.um.edu.server.business.entities.aeropuerto.PuertaAeropuerto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -30,6 +31,9 @@ public class Vuelo {
     @ManyToOne
     @JoinColumn(name = "aeropuerto_destino_id")
     private Aeropuerto aeropuertoDestino;
+    @OneToMany (mappedBy = "vuelo")
+    private List<Asientos> asientos;
+
 
 
     private LocalDate fechaSalida;
@@ -89,6 +93,14 @@ public class Vuelo {
         this.pasajerosConfirmados = pasajeros_confirmados;
         this.avion = avion;
         this.estado= estado;
+    }
+
+    public List<Asientos> getAsientos() {
+        return asientos;
+    }
+
+    public void setAsientos(List<Asientos> asientos) {
+        this.asientos = asientos;
     }
 
     @Override
