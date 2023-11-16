@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.server.business.entities.aerolinea.PasaporteCodigoVuelo;
 import uy.um.edu.server.business.entities.vuelos.Vuelo;
+import uy.um.edu.server.business.exceptions.EntidadNoExiste;
 import uy.um.edu.server.business.exceptions.EntidadYaExiste;
 import uy.um.edu.server.business.exceptions.InvalidInformation;
 import uy.um.edu.server.business.managers.VueloMgr;
@@ -51,15 +52,27 @@ public class VueloController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/asignar-pasajero")
     public ResponseEntity<String> recibirPasaporteCodigoVuelo(@RequestBody PasaporteCodigoVuelo pasaporteCodigoVuelo) {
         try {
             vueloMgr.agregarPasajero(pasaporteCodigoVuelo.getCodigoVuelo(), pasaporteCodigoVuelo.getPasaporte());
             return new ResponseEntity<>("Pasajero agregado", HttpStatus.CREATED);
+        } catch (EntidadNoExiste e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
 
+    }
+
+    @PostMapping("/check-in")
+    public ResponseEntity<String> checkIn(@RequestBody PasaporteCodigoVuelo pasaporteCodigoVuelo) {
+        try {
+            vueloMgr.checkIn(pasaporteCodigoVuelo.getCodigoVuelo(), pasaporteCodigoVuelo.getPasaporte(), pasaporteCodigoVuelo.getCantidadValijas());
+            return new ResponseEntity<>("Check-in realizado", HttpStatus.OK);
+
+        } catch (EntidadNoExiste e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 }

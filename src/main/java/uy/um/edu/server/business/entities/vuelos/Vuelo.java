@@ -31,7 +31,7 @@ public class Vuelo {
     @ManyToOne
     @JoinColumn(name = "aeropuerto_destino_id")
     private Aeropuerto aeropuertoDestino;
-    @OneToMany (mappedBy = "vuelos")
+    @OneToMany (mappedBy = "vuelo")
     private List<Asientos> asientos;
 
 

@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 import uy.um.edu.server.business.entities.pasajeros.Pasajero;
 
+import java.util.List;
+
 @Entity
 @Table(name = "asientos")
 public class Asientos {
@@ -15,8 +17,16 @@ public class Asientos {
     @ManyToOne
     @JoinColumn(name = "vuelo_id")
     private Vuelo vuelo;
+
+    @OneToMany(mappedBy = "asiento")
+    private List<Valija> valijas;
+
+    @Column(unique = true)
+    private String codigoAsiento;
     private Boolean checkIn;
     private Boolean boarding;
+    @ManyToOne
+    @JoinColumn(name = "pasajero_id")
     private Pasajero pasajero;
     public Asientos() {
     }
@@ -59,5 +69,21 @@ public class Asientos {
 
     public void setBoarding(Boolean boarding) {
         this.boarding = boarding;
+    }
+
+    public String getCodigoAsiento() {
+        return codigoAsiento;
+    }
+
+    public void setCodigoAsiento(String codigoAsiento) {
+        this.codigoAsiento = codigoAsiento;
+    }
+
+    public List<Valija> getValijas() {
+        return valijas;
+    }
+
+    public void setValijas(List<Valija> valijas) {
+        this.valijas = valijas;
     }
 }

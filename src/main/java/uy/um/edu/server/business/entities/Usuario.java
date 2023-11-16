@@ -6,12 +6,14 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 import uy.um.edu.server.business.entities.aerolinea.UsuarioAerolinea;
 import uy.um.edu.server.business.entities.aeropuerto.UsuarioAeropuerto;
+import uy.um.edu.server.business.entities.pasajeros.Pasajero;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "tipo")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = UsuarioAerolinea.class),
         @JsonSubTypes.Type(value = UsuarioAeropuerto.class),
-        @JsonSubTypes.Type(value = SuperUser.class)
+        @JsonSubTypes.Type(value = SuperUser.class),
+        @JsonSubTypes.Type(value = Pasajero.class)
 })
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)

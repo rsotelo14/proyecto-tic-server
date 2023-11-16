@@ -6,15 +6,21 @@ import org.springframework.stereotype.Service;
 import uy.um.edu.server.business.entities.aerolinea.Aerolinea;
 import uy.um.edu.server.business.entities.aeropuerto.Aeropuerto;
 import uy.um.edu.server.business.entities.pasajeros.Pasajero;
+import uy.um.edu.server.business.entities.vuelos.Asientos;
 import uy.um.edu.server.business.entities.vuelos.EstadoVuelo;
+import uy.um.edu.server.business.entities.vuelos.Valija;
 import uy.um.edu.server.business.entities.vuelos.Vuelo;
+import uy.um.edu.server.business.exceptions.EntidadNoExiste;
 import uy.um.edu.server.business.exceptions.EntidadYaExiste;
 import uy.um.edu.server.business.exceptions.InvalidInformation;
 import uy.um.edu.server.persistence.PasajeroRepository;
 import uy.um.edu.server.persistence.aeropuerto.AeropuertoRepository;
+import uy.um.edu.server.persistence.vuelos.AsientoRepository;
+import uy.um.edu.server.persistence.vuelos.ValijaRepository;
 import uy.um.edu.server.persistence.vuelos.VueloRepository;
 import uy.um.edu.server.business.entities.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,6 +37,10 @@ public class VueloMgr {
     @Autowired
     @Lazy
     private PasajeroRepository pasajeroRepository;
+    @Autowired
+    private AsientoRepository asientoRepository;
+    @Autowired
+    private ValijaRepository valijaRepository;
 
     public void agregarVuelo(Vuelo vuelo) throws InvalidInformation, EntidadYaExiste {
         //verifico si la informacion del vuelo es válida
@@ -58,10 +68,18 @@ public class VueloMgr {
         vuelo.setAeropuertoOrigen(aeropuertoOrigen);
         vuelo.setAeropuertoDestino(aeropuertoDestino);
         vuelo.setAerolinea(aerolinea);
-
-
-
+        vuelo.setAsientos(new ArrayList<Asientos>());
         vueloRepository.save(vuelo);
+
+        for (int i = 0; i < vuelo.getCapacidadMaxima(); i++) {
+            Asientos asiento = new Asientos();
+            asiento.setCodigoAsiento(vuelo.getCodigoVuelo()+ "-" + i);
+            asiento.setVuelo(vuelo);
+            asientoRepository.save(asiento);
+            vuelo.getAsientos().add(asiento);
+        }
+
+
     }
 
     public List<Vuelo> obtenerVuelosPorAeropuertoOrigen(Aeropuerto aeropuertoOrigen){
@@ -124,15 +142,50 @@ public class VueloMgr {
         Aeropuerto aeropuerto = aeropuertoMgr.obtenerUnoPorCodigo(codigoAeropuerto);
         rechazarVuelo(vuelo, aeropuerto);
     }
-    public void agregarPasajero(String codigoVuelo,String pasaporte){
-        Vuelo vuelo = vueloRepository.findOneByCodigoVuelo(codigoVuelo);
+    public void agregarPasajero(String codigoVuelo,String pasaporte) throws EntidadNoExiste {
         Pasajero pasajero =pasajeroRepository.findOneByPasaporte(pasaporte);
-        vuelo.getAsientos().stream().filter(asientos -> asientos.getPasajero()==null).findFirst().get().setPasajero(pasajero);
+        if (pasajero==null){
+            throw new EntidadNoExiste("Pasajero no existe");
+        }
+        Vuelo vuelo = vueloRepository.findOneByCodigoVuelo(codigoVuelo);
+        if (vuelo==null){
+            throw new EntidadNoExiste("Vuelo no existe");
+        }
+        Asientos asiento = vuelo.getAsientos().stream().filter(asientos -> asientos.getPasajero()==null).findFirst().get();
+        asiento.setPasajero(pasajero);
+        asientoRepository.save(asiento);
 
     }
 
     public Vuelo obtenerPorCodigoVuelo(String codigoVuelo) {
         return vueloRepository.findOneByCodigoVuelo(codigoVuelo);
+    }
+
+    public void checkIn(String codigoVuelo, String pasaporte, Integer cantidadValijas) throws EntidadNoExiste {
+        Vuelo vuelo = vueloRepository.findOneByCodigoVuelo(codigoVuelo);
+        if (vuelo==null){
+            throw new EntidadNoExiste("Vuelo no existe");
+        }
+        Pasajero pasajero = pasajeroRepository.findOneByPasaporte(pasaporte);
+        if (pasajero==null){
+            throw new EntidadNoExiste("Pasajero no existe");
+        }
+        Asientos asiento = vuelo.getAsientos().stream().filter(asientos -> pasajero.equals(asientos.getPasajero())).findFirst().get();
+        if (asiento==null){
+            throw new EntidadNoExiste("El pasajero no tiene asiento asignado");
+        }
+        asiento.setCheckIn(true);
+        asientoRepository.save(asiento);
+
+        for (int i = 0; i < cantidadValijas; i++) {
+            Valija valija = new Valija();
+            valija.setAsiento(asiento);
+            valija.setCodigoValija(asiento.getCodigoAsiento() + "-" + i);
+            asiento.getValijas().add(valija);
+            valijaRepository.save(valija);
+        }
+
+
     }
 }
 
