@@ -1,4 +1,5 @@
 package uy.um.edu.server.business.entities.vuelos;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.cglib.core.Local;
@@ -31,6 +32,7 @@ public class Vuelo {
     @ManyToOne
     @JoinColumn(name = "aeropuerto_destino_id")
     private Aeropuerto aeropuertoDestino;
+    @JsonIgnore
     @OneToMany (mappedBy = "vuelo")
     private List<Asientos> asientos;
 
