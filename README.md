@@ -20,3 +20,10 @@ Para poner a funcionar el programa se deben seguir los siguientes pasos.
   <li> Correr cliente</li>
   
 </ol>
+
+## Documentación
+
+Se puede encontrar la documentación del proyecto en el siguiente link:
+
+https://drive.google.com/drive/folders/1HEMAfPmP9ziIa_d5dD4kFz6nVb9bGsV8?usp=drive_link
+

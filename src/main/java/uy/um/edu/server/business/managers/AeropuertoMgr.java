@@ -11,6 +11,8 @@ import uy.um.edu.server.business.entities.vuelos.Vuelo;
 import uy.um.edu.server.business.exceptions.EntidadYaExiste;
 import uy.um.edu.server.business.exceptions.InvalidInformation;
 import uy.um.edu.server.persistence.aeropuerto.AeropuertoRepository;
+import uy.um.edu.server.persistence.aeropuerto.PistaAeropuertoRepository;
+import uy.um.edu.server.persistence.aeropuerto.PuertaAeropuertoRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,11 @@ public class AeropuertoMgr {
     private VueloMgr vueloMgr;
     @Autowired
     private AerolineaMgr aerolineaMgr;
+    @Autowired
+    private PistaAeropuertoRepository pistaAeropuertoRepository;
 
+    @Autowired
+    private PuertaAeropuertoRepository puertaAeropuertoRepository;
     public AeropuertoMgr() {
     }
     public AeropuertoMgr(AeropuertoRepository aeropuertoRepository) {
@@ -48,6 +54,22 @@ public class AeropuertoMgr {
             throw  new EntidadYaExiste("El codigo del aeropuerto creado ya existe");
         }
         aeropuertoRepository.save(aeropuerto);
+
+        //Crear pista y puerta
+        Aeropuerto aeropuerto1 = aeropuertoRepository.findOneByCodigo(aeropuerto.getCodigo());
+        PistaAeropuerto pistaAeropuerto = new PistaAeropuerto();
+        pistaAeropuerto.setAeropuerto(aeropuerto);
+        pistaAeropuerto.setNumeroPista(aeropuerto1.getAeropuertoid()*100);
+
+        PuertaAeropuerto puertaAeropuerto = new PuertaAeropuerto();
+        puertaAeropuerto.setAeropuerto(aeropuerto);
+        puertaAeropuerto.setNumeroPuerta(aeropuerto1.getAeropuertoid());
+        aeropuerto.getPistas().add(pistaAeropuerto);
+        aeropuerto.getPuertas().add(puertaAeropuerto);
+
+        aeropuertoRepository.save(aeropuerto);
+        pistaAeropuertoRepository.save(pistaAeropuerto);
+        puertaAeropuertoRepository.save(puertaAeropuerto);
     }
     public Iterable<Aeropuerto> findAll(){
         return aeropuertoRepository.findAll();

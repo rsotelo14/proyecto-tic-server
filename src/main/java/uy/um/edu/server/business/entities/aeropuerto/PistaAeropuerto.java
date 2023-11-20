@@ -14,6 +14,7 @@ public class PistaAeropuerto {
     private Long tarifaHora;
 
     @Column(unique = true , nullable = false)
+
     private Long numeroPista;
 
     @ManyToOne

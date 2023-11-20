@@ -19,6 +19,7 @@ public class PuertaAeropuerto {
     private Long id;
     private Long tarifaHora;
     @Column(unique = true, nullable = false)
+
     private Long numeroPuerta;
     @ManyToOne
     @JoinColumn(name = "aeropuerto_id")
@@ -54,5 +55,10 @@ public class PuertaAeropuerto {
 
     public Aeropuerto getAeropuerto() {
         return aeropuerto;
+    }
+
+    public void setAeropuerto(Aeropuerto aeropuerto) {
+
+            this.aeropuerto = aeropuerto;
     }
 }

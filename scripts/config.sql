@@ -17,3 +17,6 @@ INSERT INTO usuarios (id, nombre, apellido, correo, contrasena, pasaporte)
               VALUES (1,'Super', 'User', 'superuser','superuser','superuser');
 			  
 INSERT INTO super_user (id) VALUES (1);
+
+
+

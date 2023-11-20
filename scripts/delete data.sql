@@ -1,0 +1,20 @@
+
+DELETE FROM valija;
+DELETE FROM asientos;
+DELETE FROM reservas_pista;
+DELETE FROM reservas_puerta;
+DELETE FROM pista_aeropuerto;
+DELETE FROM puertas_aeropuerto;
+DELETE FROM admin_aeropuerto;
+DELETE FROM maletero_aeropuerto;
+DELETE FROM admin_aerolinea;
+DELETE FROM usuario_aeropuerto;
+DELETE FROM usuario_aerolinea;
+DELETE FROM aerolinea_aeropuerto;
+DELETE FROM vuelos;
+DELETE FROM aviones;
+DELETE FROM aerolineas;
+DELETE FROM aeropuertos;
+DELETE FROM super_user;
+DELETE FROM pasajero;
+DELETE FROM usuarios;
